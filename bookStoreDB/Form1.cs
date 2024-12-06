@@ -25,7 +25,7 @@ namespace bookStoreDB
         {
             _client = new MongoClient(Properties.Settings.Default.ConnString);
 
-            OutputBooksData(new BsonDocument());
+            OutputBooksData(new BsonDocument(), new BsonDocument());
         }
 
         private void button_filter_Click(object sender, EventArgs e)
@@ -36,27 +36,38 @@ namespace bookStoreDB
             var maxPrice = this.numericUpDown_maxPrice.Value;
             var minPages = this.numericUpDown_minPages.Value;
             var maxPages = this.numericUpDown_maxPages.Value;
+            var sortField = DefineSortField(this.comboBox_sort.SelectedIndex);
+            BsonDocument sort;
 
+            if (sortField == "")
+                sort = new BsonDocument();
+            else if (this.radioButton_ascend.Checked)
+                sort = new BsonDocument(sortField, 1);
+            else if (this.radioButton_descend.Checked)
+                sort = new BsonDocument(sortField, -1);
+            else
+                sort = new BsonDocument();
+            
             var filter = new BsonDocument("$and", new BsonArray{
                 new BsonDocument("title", new BsonDocument("$regex", ".*"+title+".*")),
                 new BsonDocument("author", new BsonDocument("$regex", ".*"+author+".*")),
                 new BsonDocument("price", new BsonDocument("$gte", minPrice)),
                 new BsonDocument("price", new BsonDocument("$lte", maxPrice)),
                 new BsonDocument("pages", new BsonDocument("$gte", minPages)),
-                new BsonDocument("pages", new BsonDocument("$lte", maxPrice))
+                new BsonDocument("pages", new BsonDocument("$lte", maxPages))
 
             });
 
-        OutputBooksData(filter);
+        OutputBooksData(filter, sort);
         }
 
-        private void OutputBooksData(FilterDefinition<BsonDocument> filter)
+        private void OutputBooksData(FilterDefinition<BsonDocument> filter, SortDefinition<BsonDocument> sort)
         {
             var db = _client.GetDatabase("bookstore");
  
             IMongoCollection<BsonDocument> booksCollection = db.GetCollection<BsonDocument>("books");
             
-            List<BsonDocument> books = booksCollection.Find(filter).ToList();
+            List<BsonDocument> books = booksCollection.Find(filter).Sort(sort).ToList();
 
             DataTable dataTable = new DataTable();
 
@@ -84,9 +95,25 @@ namespace bookStoreDB
                     book["count"]
                 });
             }
-
             // Display the data from the data table in the data grid view.
             this.booksInfoView.DataSource = dataTable;
+        }
+
+        private string DefineSortField(int selectedIndex)
+        {
+            switch (selectedIndex)
+            {
+                case 0:
+                    return "price";
+                case 1:
+                    return "pages";
+                case 2:
+                    return "yearOfPublication";
+                case 3:
+                    return "count";
+            }
+
+            return "";
         }
     }
 }
