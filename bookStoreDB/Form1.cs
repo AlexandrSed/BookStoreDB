@@ -19,15 +19,35 @@ namespace bookStoreDB
             InitializeComponent();
         }
 
+        private MongoClient _client;
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            MongoClient client = new MongoClient(Properties.Settings.Default.ConnString);
-            
-            var db = client.GetDatabase("bookstore");
+            _client = new MongoClient(Properties.Settings.Default.ConnString);
+
+            OutputBooksData(new BsonDocument());
+        }
+
+        private void button_filter_Click(object sender, EventArgs e)
+        {
+            var title = this.textBox_title.Text;
+            var author = this.textBox_author.Text;
+
+            var filter = new BsonDocument("$and", new BsonArray{
+                new BsonDocument("title", new BsonDocument("$regex", ".*"+title+".*")),
+                new BsonDocument("author", new BsonDocument("$regex", ".*"+author+".*"))
+            });
+
+        OutputBooksData(filter);
+        }
+
+        private void OutputBooksData(FilterDefinition<BsonDocument> filter)
+        {
+            var db = _client.GetDatabase("bookstore");
  
             IMongoCollection<BsonDocument> booksCollection = db.GetCollection<BsonDocument>("books");
             
-            List<BsonDocument> books = booksCollection.Find(new BsonDocument()).ToList();
+            List<BsonDocument> books = booksCollection.Find(filter).ToList();
 
             DataTable dataTable = new DataTable();
 
@@ -58,7 +78,6 @@ namespace bookStoreDB
 
             // Display the data from the data table in the data grid view.
             this.booksInfoView.DataSource = dataTable;
-            
         }
     }
 }
