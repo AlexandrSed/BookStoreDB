@@ -32,10 +32,19 @@ namespace bookStoreDB
         {
             var title = this.textBox_title.Text;
             var author = this.textBox_author.Text;
+            var minPrice = this.numericUpDown_minPrice.Value;
+            var maxPrice = this.numericUpDown_maxPrice.Value;
+            var minPages = this.numericUpDown_minPages.Value;
+            var maxPages = this.numericUpDown_maxPages.Value;
 
             var filter = new BsonDocument("$and", new BsonArray{
                 new BsonDocument("title", new BsonDocument("$regex", ".*"+title+".*")),
-                new BsonDocument("author", new BsonDocument("$regex", ".*"+author+".*"))
+                new BsonDocument("author", new BsonDocument("$regex", ".*"+author+".*")),
+                new BsonDocument("price", new BsonDocument("$gte", minPrice)),
+                new BsonDocument("price", new BsonDocument("$lte", maxPrice)),
+                new BsonDocument("pages", new BsonDocument("$gte", minPages)),
+                new BsonDocument("pages", new BsonDocument("$lte", maxPrice))
+
             });
 
         OutputBooksData(filter);
