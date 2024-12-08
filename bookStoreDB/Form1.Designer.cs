@@ -231,7 +231,7 @@
             // 
             this.button_add.Location = new System.Drawing.Point(17, 661);
             this.button_add.Name = "button_add";
-            this.button_add.Size = new System.Drawing.Size(225, 25);
+            this.button_add.Size = new System.Drawing.Size(225, 32);
             this.button_add.TabIndex = 20;
             this.button_add.Text = "добавить книгу";
             this.button_add.UseVisualStyleBackColor = true;
@@ -241,7 +241,7 @@
             // 
             this.button_delete.Location = new System.Drawing.Point(683, 663);
             this.button_delete.Name = "button_delete";
-            this.button_delete.Size = new System.Drawing.Size(130, 23);
+            this.button_delete.Size = new System.Drawing.Size(130, 30);
             this.button_delete.TabIndex = 21;
             this.button_delete.Text = "удалить";
             this.button_delete.UseVisualStyleBackColor = true;

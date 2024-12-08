@@ -65,7 +65,7 @@ namespace bookStoreDB
         {
             var db = _client.GetDatabase("bookstore");
  
-            IMongoCollection<BsonDocument> booksCollection = db.GetCollection<BsonDocument>("books");
+            var booksCollection = db.GetCollection<BsonDocument>("books");
             
             List<BsonDocument> books = booksCollection.Find(filter).Sort(sort).ToList();
 
@@ -118,7 +118,7 @@ namespace bookStoreDB
 
         private void button_add_Click(object sender, EventArgs e)
         {
-            NewBook book = new NewBook();
+            var book = new NewBook();
             book.FormClosed += new FormClosedEventHandler(book_FormClosed);
             book.ShowDialog();
         }
@@ -130,7 +130,37 @@ namespace bookStoreDB
 
         private void button_delete_Click(object sender, EventArgs e)
         {
+            var db = _client.GetDatabase("bookstore");
+
+            var books = db.GetCollection<BsonDocument>("books");
+
+            var booksForDeleting = this.booksInfoView.SelectedRows;
+
+            if (booksForDeleting.Count == 0)
+                return;
             
+            foreach (DataGridViewRow book in booksForDeleting)
+            {
+                books.DeleteOne(ConvertDataGridRowToBson(book));
+            }
+            
+            OutputBooksData(new BsonDocument(), new BsonDocument());
+        }
+
+        private BsonDocument ConvertDataGridRowToBson(DataGridViewRow row)
+        {
+            return new BsonDocument
+            {
+                {"title", row.Cells[0].Value.ToString()},
+                {"author", row.Cells[1].Value.ToString()},
+                {"genre", row.Cells[2].Value.ToString()},
+                {"price", int.Parse(row.Cells[3].Value.ToString())},
+                {"pages", int.Parse(row.Cells[4].Value.ToString())},
+                {"publisher", row.Cells[5].Value.ToString()},
+                {"yearOfPublication", int.Parse(row.Cells[6].Value.ToString())},
+                {"ageLimit", row.Cells[7].Value.ToString()},
+                {"count", int.Parse(row.Cells[8].Value.ToString())}
+            };
         }
     }
 }
