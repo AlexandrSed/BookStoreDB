@@ -49,6 +49,8 @@
             this.radioButton_ascend = new System.Windows.Forms.RadioButton();
             this.label_sort = new System.Windows.Forms.Label();
             this.comboBox_sort = new System.Windows.Forms.ComboBox();
+            this.button_add = new System.Windows.Forms.Button();
+            this.button_delete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.booksInfoView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_minPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_maxPrice)).BeginInit();
@@ -217,6 +219,7 @@
             // 
             // comboBox_sort
             // 
+            this.comboBox_sort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_sort.FormattingEnabled = true;
             this.comboBox_sort.Items.AddRange(new object[] { "Цена", "Количество страниц", "Год выпуска", "Количество экземпляров" });
             this.comboBox_sort.Location = new System.Drawing.Point(362, 126);
@@ -224,11 +227,33 @@
             this.comboBox_sort.Size = new System.Drawing.Size(277, 24);
             this.comboBox_sort.TabIndex = 19;
             // 
+            // button_add
+            // 
+            this.button_add.Location = new System.Drawing.Point(17, 661);
+            this.button_add.Name = "button_add";
+            this.button_add.Size = new System.Drawing.Size(225, 25);
+            this.button_add.TabIndex = 20;
+            this.button_add.Text = "добавить книгу";
+            this.button_add.UseVisualStyleBackColor = true;
+            this.button_add.Click += new System.EventHandler(this.button_add_Click);
+            // 
+            // button_delete
+            // 
+            this.button_delete.Location = new System.Drawing.Point(683, 663);
+            this.button_delete.Name = "button_delete";
+            this.button_delete.Size = new System.Drawing.Size(130, 23);
+            this.button_delete.TabIndex = 21;
+            this.button_delete.Text = "удалить";
+            this.button_delete.UseVisualStyleBackColor = true;
+            this.button_delete.Click += new System.EventHandler(this.button_delete_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(825, 667);
+            this.ClientSize = new System.Drawing.Size(825, 698);
+            this.Controls.Add(this.button_delete);
+            this.Controls.Add(this.button_add);
             this.Controls.Add(this.comboBox_sort);
             this.Controls.Add(this.label_sort);
             this.Controls.Add(this.radioButton_ascend);
@@ -260,6 +285,10 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Button button_delete;
+
+        private System.Windows.Forms.Button button_add;
 
         private System.Windows.Forms.ComboBox comboBox_sort;
 

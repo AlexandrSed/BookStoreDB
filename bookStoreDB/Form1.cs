@@ -115,5 +115,22 @@ namespace bookStoreDB
 
             return "";
         }
+
+        private void button_add_Click(object sender, EventArgs e)
+        {
+            NewBook book = new NewBook();
+            book.FormClosed += new FormClosedEventHandler(book_FormClosed);
+            book.ShowDialog();
+        }
+        
+        private void book_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            OutputBooksData(new BsonDocument(), new BsonDocument());
+        }
+
+        private void button_delete_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }
